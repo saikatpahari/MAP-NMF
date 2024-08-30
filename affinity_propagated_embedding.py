@@ -120,7 +120,7 @@ class RandomWalk():
         self.matrix2 = scipy.sparse.csr_matrix(matrix2)
         self.matrix_conn = scipy.sparse.csr_matrix(matrix_conn)
 
-       def trans_mat(self, matA, matB, matC, matConn, attWeight, alpha, step):
+       def transition_m(self, matA, matB, matC, matConn, attWeight, alpha, step):
         strWeight = 1 - attWeight
 
         TranB = preprocessing.normalize(matConn, "l1")
