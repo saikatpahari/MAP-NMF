@@ -171,9 +171,16 @@ class RandomWalk():
         M = randomwalk_matrix(Q=Tran, window=step, Neg_minus=diag_F_minus)
         return M
 
-   
+def affinity_embedding(self, matrix):
+        t1 = time.time()
+        smat = scipy.sparse.csc_matrix(matrix)
+        U, Sig, VT = randomized_svd(smat, n_components=self.dimension, n_iter=5, random_state=None)
+        U = U * np.sqrt(Sig)
+        Z = preprocessing.normalize(U, "l2")
+        return Z   
+
 def parse_args():
-    parser = argparse.ArgumentParser(description="Run BiasedWalk.")
+    parser = argparse.ArgumentParser(description="Run RandomdWalk.")
     parser.add_argument('-graph', nargs='?', default='cora/network.txt',
                         help='Graph path')
     parser.add_argument('-output', nargs='?', default='emb/cora.emb',
