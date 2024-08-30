@@ -2,7 +2,7 @@
 from randomwalk import decomposition
 import networkx as nx
 from operator import itemgetter
-from BFS import sampleGraph
+from joint_opt import jot
 
 def getMembership(H):
     HT = np.transpose(H)
@@ -59,10 +59,10 @@ def main():
     args = parse_args()
 
     model = RandomWalk(args.graph, args.dimension, args.attributes, args.wt)
-    features_matrix = \
+    tr_matrix = \
         model.trans_mat(model.matrix0, model.matrix1, model.matrix2, model.matrix_conn, args.wt, args.alpha, args.step)
     model.save_embedding(args.output, features_matrix)
-
-
+M= jot(A, tr_matrix, X, U,V,H)
+get_communities(M, clusters, alpha)
 if __name__ == '__main__':
     main()
