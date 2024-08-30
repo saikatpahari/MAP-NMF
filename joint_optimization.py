@@ -1,85 +1,68 @@
-def is_satisfied(self, count, iter):
-        """
-        Stopping criteria based on stopping parameters. 
-        
-        Return logical value denoting factorization continuation. 
-        :param count: Current objective function value. 
-        :type count: `float`
-        :param iter: Current iteration number. 
-        :type iter: `int`
-        """
-        if self.max_iter and self.max_iter <= iter:
-            return False
-        if self.test_conv and iter % self.test_conv != 0:
-            return True
-        if iter > 0 and count < self.min_residuals * self.init_grad:
-            return False
-        if self.iterW == 0 and self.iterH == 0 and self.epsW + self.epsH < self.min_residuals * self.init_grad:
-            # There was no move in this iteration
-            return False
-        return True
+import time
+import sys
+import scipy.stats
+import numpy as np
+import scipy as sp
+#import VU_init
+# import networkx as nx
+# from matplotlib import pyplot
+# max_iter=100 #number of iterations
+b=0.0   #bias for sigmoid function
 
-def mat_factorz(self):
-        """
-        Here we compute matrix factorization.
-        """
-        for itr in range(self.n_itr):
-            self.U, self.H = self.seed.initialize(
-                self.V, self.rank, self.options)
-            self.gU = dot(dot(self.M, self.V)+lamda(self.Z, self.H)) / dot(self.U,
-                self.V.T, self.V)    
-            self.gV = dot(self.M.T,self.U) / dot(self.V,self.U.T)
-                , self.U)
-            self.gH = dot(self.Z.T, self.U) / dot(dot(
-                self.V, self.U.T) self.U)
-            self.init_grad = norm(vstack(self.gW, self.gH.T), p='fro')
-            self.epsW = max(1e-3, self.min_residuals) * self.init_grad
-            self.epsH = self.epsW
-            # iterW and iterH are not parameters, as these values are used only
-            # in first objective computation
-            self.iterU = 10
-            self.iterV = 10
-            self.iterH = 10
-            count = sys.float_info.max
-            best_obj = count if itr == 0 else best_obj
-            iter = 0
-            if self.callback_init:
-                self.final_obj = count
-                self.n_iter = iter
-                mffit = mf_fit.Mf_fit(self)
-                self.callback_init(mffit)
-            while self.is_satisfied(count, iter):
-                self.update()
-                iter += 1
-                count = self.objective(
-                ) if not self.test_conv or iter % self.test_conv == 0 else count
-                if self.track_error:
-                    self.tracker.track_error(itr, count)
-            if self.callback:
-                self.final_obj = count
-                self.n_iter = iter
-                mffit = mf_fit.Mf_fit(self)
-                self.callback(mffit)
-            if self.track_factor:
-                self.tracker.track_factor(
-                    itr, W=self.W, H=self.H, final_obj=count, n_iter=iter)
-            # if multiple itrs are performed, fitted factorization model with
-            # the lowest objective function value is retained
-            if count <= best_obj or itr == 0:
-                best_obj = count
-                self.n_iter = iter
-                self.final_obj = count
-                U = self.U
+class mapnmf:
+    def __init__(self,alp=1,A,W,X,data,init=1,bet=0.5,max_iter=100):
+        node_size = S.shape[0]
+        att_size = X.shape[1]
+        #H is a matrix between topic1 and topic2
+        H = np.random.random((k1,k2))
+        #create initialized matrices
+        U,V = VU_init.VU_init(X,k1,k2,init,data)
+        # W = np.abs(S_ori-1)
+        #W_ = 1-W
+        # general params
+        self.S = S
+        self.W = W
+        self.W_ = W_
+        self.X = X
+        self.max_iter = max_iter
+        self.U = U
+        self.H = H
+        self.V = V
+        self.alp = alp
+        self.bet = bet
+    def fit_predict(self):
+        def update_U(A,X,alp,U,H,V,bet):
+            UUT = U.dot(U.transpose())
+            U = U*(4*A.dot(U)+(2.alp*X.dot(H) + 2.bet.Z.dot(V))/(4*(UUT*U).dot(U)+(alp.2.0*)*(HHT*).dot(U)+(alp*2*UH.dot(H.transpose())+bet*2*U.dot(V.transpose().V))
+            #V = V*((a*2.0)*S.dot(V)+(lam*A.dot(U) * fdVT).dot(T.transpose()))/(((2.0*a)*(VVT*S_ori)+(2.0*(1.0-a))*(VVT*S_)).dot(V)+(lam*fVT.dot(U.transpose().dot(U)) * fdVT).dot(T.transpose()))
+            return U
         
-        return U
-
-def update(self):
-        """Update basis and mixture matrix."""
-        self.W, self.gW, self.iterW = self._subproblem(
-            self.V.T, self.H.T, self.W.T, self.epsW)
-        self.W = self.W.T
-        self.gW = self.gW.T
-        self.epsW = 0.1 * self.epsW if self.iterW == 0 else self.epsW
-        self.H, self.gH, self.iterH = self._subproblem(
-            self.V, self.W, self.H, self.epsH)
-        self.epsH = 0.1 * self.epsH if self.iterH == 0 else self.epsH
+        def update_V(Z,U,H,V):
+             V= V*(Z.transpose().dot(U))/(V.(dot(H).transpose()).dot(U))
+             return V
+        def update_H(A,X,U,H,V):
+             H = H*(U.transpose().dot(fdUH*(X.dot(V))))/(U.transpose().dot((fdUH*fUH).dot(V.transpose().dot(V))))
+            return H
+        def removing_nan(mat):
+            nan_list = np.argwhere(np.isnan(mat))
+            for i in nan_list:
+                mat[i[0],i[1]]=sys.float_info.epsilon
+            return mat
+        
+        start = time.time() #memo start time
+        #learning step
+        count = 0
+        while 1:
+            count += 1
+            # print loss_function(S,V,U,Z,A,T,lam)
+            if self.rho == 0.5:
+                self.U = removing_nan(update_U_woPU(self.S,self.X,self.lam,self.U,self.H,self.V))
+            else:
+                self.U = removing_nan(update_U(self.S,self.W,self.W_,self.X,self.lam,self.U,self.H,self.V,self.rho))
+            self.V = removing_nan(update_V(self.S,self.X,self.U,self.H,self.V))
+            self.H = removing_nan(update_H(self.S,self.X,self.U,self.H,self.V))
+            if count>=self.max_iter:
+                break
+        elapsed_time = time.time() - start  #measure elapsed time
+        print (("optimizing_time:{0}".format(elapsed_time)) + "[sec]")
+        return self.U
