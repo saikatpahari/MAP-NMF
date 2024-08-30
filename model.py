@@ -58,7 +58,7 @@ def getCommunities(M, clusters, alpha):
 def main():
     args = parse_args()
 
-    model = BiasedWalk(args.graph, args.dimension, args.attributes, args.wt)
+    model = RandomWalk(args.graph, args.dimension, args.attributes, args.wt)
     features_matrix = \
         model.trans_mat(model.matrix0, model.matrix1, model.matrix2, model.matrix_conn, args.wt, args.alpha, args.step)
     model.save_embedding(args.output, features_matrix)
