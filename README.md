@@ -1,3 +1,3 @@
-For default parameters, use following command
+**For default parameters, use following command**
 
 python mapnmf.py
