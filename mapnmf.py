@@ -50,7 +50,7 @@ def main():
     tr_matrix = \
         model.trans_mat(model.matrix0, model.matrix1, model.matrix2, model.matrix_conn, args.wt, args.alpha, args.step)
     model.save_embedding(args.output, features_matrix)
-M= jot.fit_predict(A, tr_matrix, X, U,V,H)
-get_communities(M, clusters, alpha)
-if __name__ == '__main__':
+    M= jot.fit_predict(A, tr_matrix, X, U,V,H)
+    get_communities(M, clusters, alpha)
+    if __name__ == '__main__':
     main()
