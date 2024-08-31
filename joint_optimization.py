@@ -5,7 +5,7 @@ import scipy as sp
 # max_iter=100 #number of iterations
 
 
-class mapnmf:
+class joint_opt:
     def __init__(self,alp=1,A,W,X,data,init=1,bet=0.5,max_iter=100):
         node_size = S.shape[0]
         att_size = X.shape[1]
