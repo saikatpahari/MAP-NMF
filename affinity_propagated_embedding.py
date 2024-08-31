@@ -178,6 +178,13 @@ def affinity_embedding(self, matrix):
         U = U * np.sqrt(Sig)
         Z = preprocessing.normalize(U, "l2")
         return Z   
+ def save_embedding(self, emb_file, features):
+        f_emb = open(emb_file, 'w')
+        f_emb.write(str(len(features)) + " " + str(features.shape[1]) + "\n")
+        for i in range(len(features)):
+            s = str(i) + " " + " ".join(str(f) for f in features[i].tolist())
+            f_emb.write(s + "\n")
+        f_emb.close()
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run RandomdWalk.")
