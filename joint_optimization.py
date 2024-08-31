@@ -1,15 +1,11 @@
-import time
-import sys
-import scipy.stats
-import numpy as np
 import scipy as sp
-#import VU_init
+
 # import networkx as nx
 # from matplotlib import pyplot
 # max_iter=100 #number of iterations
-b=0.0   #bias for sigmoid function
 
-class joint_opt:
+
+class mapnmf:
     def __init__(self,alp=1,A,W,X,data,init=1,bet=0.5,max_iter=100):
         node_size = S.shape[0]
         att_size = X.shape[1]
@@ -55,7 +51,7 @@ class joint_opt:
         while 1:
             count += 1
             # print loss_function(S,V,U,Z,A,T,lam)
-            if self.rho == 0.5:
+            if self.alp == 0.5:
                 self.U = removing_nan(update_U_woPU(self.S,self.X,self.lam,self.U,self.H,self.V))
             else:
                 self.U = removing_nan(update_U(self.S,self.W,self.W_,self.X,self.lam,self.U,self.H,self.V,self.rho))
