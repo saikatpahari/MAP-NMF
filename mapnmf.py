@@ -42,19 +42,7 @@ def getCommunities(M, clusters, alpha):
         detectedCommunities.append(temp)
     return detectedCommunities
     
-
-    def save_embedding(self, emb_file, features):
-        f_emb = open(emb_file, 'w')
-        f_emb.write(str(len(features)) + " " + str(features.shape[1]) + "\n")
-        for i in range(len(features)):
-            s = str(i) + " " + " ".join(str(f) for f in features[i].tolist())
-            f_emb.write(s + "\n")
-        f_emb.close()
-
-
-
-
-
+  
 def main():
     args = parse_args()
 
